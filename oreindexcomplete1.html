@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalogo Biblioteca Seminario Pio XI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f5fb;
+      color: #111827;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.9rem;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .filters-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px 18px 8px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      margin-bottom: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .filters-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .filters-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4b5563;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+
+    .field label {
+      font-weight: 600;
+      color: #374151;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+
+    .field input,
+    .field select {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      background-color: #f9fafb;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.25);
+      background-color: #ffffff;
+    }
+
+    .filters-actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: white;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.03);
+    }
+
+    .btn-ghost:hover {
+      background-color: #f3f4f6;
+    }
+
+    .results-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px 18px 6px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .results-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4b5563;
+    }
+
+    .results-count {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    thead {
+      background: #f9fafb;
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7280;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    tbody tr:hover {
+      background: #eef2ff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background-color: #eef2ff;
+      color: #4f46e5;
+      font-weight: 500;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .results-card {
+        padding-inline: 12px;
+      }
+
+      th:nth-child(3),
+      th:nth-child(4),
+      td:nth-child(3),
+      td:nth-child(4) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Catalogo Biblioteca Seminario Pio XI</h1>
+        <p>Ricerca e filtra le opere in base a titolo, autore, collocazione e argomento.</p>
+      </div>
+    </header>
+
+    <section class="filters-card" aria-label="Filtri catalogo">
+      <div class="filters-header">
+        <h2>Filtri</h2>
+      </div>
+      <div class="filters-grid">
+        <div class="field">
+          <label for="f-titolo">Titolo opera</label>
+          <input id="f-titolo" type="text" placeholder="Es. Le Confessioni" />
+        </div>
+        <div class="field">
+          <label for="f-autore">Autore</label>
+          <input id="f-autore" type="text" placeholder="Es. Agostino" />
+        </div>
+        <div class="field">
+          <label for="f-collocazione">Collocazione</label>
+          <input id="f-collocazione" type="text" placeholder="Es. H3, n°2" />
+        </div>
+        <div class="field">
+          <label for="f-argomento">Argomento</label>
+          <select id="f-argomento">
+            <option value="">Tutti gli argomenti</option>
+            <option value="Scritturistico">Scritturistico</option>
+            <option value="Teologico">Teologico</option>
+            <option value="Dogmatico">Dogmatico</option>
+            <option value="Esegetico">Esegetico</option>
+            <option value="Filosofico">Filosofico</option>
+            <option value="Culturale">Culturale</option>
+            <option value="Spirituale">Spirituale</option>
+            <option value="Socioloco">Socioloco</option>
+            <option value="Etico">Etico</option>
+            <option value="Pastorale">Pastorale</option>
+            <option value="Psicologico">Psicologico</option>
+            <option value="Storico">Storico</option>
+            <option value="Scientifico">Scientifico</option>
+            <option value="Letterario">Letterario</option>
+            <option value="Attuale">Attuale</option>
+            <option value="Eretico">Eretico</option>
+            <option value="Metafisico">Metafisico</option>
+            <option value="Escatologia">Escatologia</option>
+            <option value="Mariologia">Mariologia</option>
+          </select>
+        </div>
+      </div>
+      <div class="filters-actions">
+        <button class="btn btn-ghost" id="btn-reset" type="button">Azzera filtri</button>
+        <button class="btn btn-primary" id="btn-filtra" type="button">Applica filtri</button>
+      </div>
+    </section>
+
+    <section class="results-card" aria-label="Risultati catalogo">
+      <div class="results-header">
+        <h2>Risultati</h2>
+        <span class="results-count" id="results-count"></span>
+      </div>
+      <div class="results-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Titolo opera</th>
+              <th>Autore</th>
+              <th>Collocazione</th>
+              <th>Argomento</th>
+            </tr>
+          </thead>
+          <tbody id="catalog-body">
+            <!-- Popolato via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const catalogData = [
+      { titolo: "Le Confessioni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patrologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La teologia tra rivelazione e storia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il clero diocesano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia Antico Testamento, Genesi - 2 Samuele", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Iniziazione alla pratica della teologia (introduzione)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia Antico Testamento, 1 Re - Salmi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia Antico Testamento, Proverbi - Malachia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patrologia Volume 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La rivelazione: evento e credibilità", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Genesi 1-11 alle origini dell’uomo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dal diritto naturale alla sociologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia medievale", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia filosofica 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis: i fondamenti d’una dogmatica della storia della salvezza", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Opuscola Omnia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia Nuovo Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento:"" },
+      { titolo: "I patriarchi Genesi 12-36", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia Moderna", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Iniziazione alla pratica delle teologia (Dogmatica I)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’evoluzione religiosa degli adolescenti", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patristica Volume 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "STORIA DELLA TEOLOGIA CRISTIANA 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gesù il Signore", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Iniziazione alla pratica della teologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Institutiones Philosophicae", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia della pace", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis: I fondamenti d’una dogmatica della storia della salvezza", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patrologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione all’antico Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia filosofica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Storia di Giuseppe", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia delle filosofie 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento" },
+      { titolo: "La Chiesa dei Giudeo-cristiani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Iniziazione alla pratica della teologia (morale)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "STORIA DELLA TEOLOGIA CRISTIANA 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis: La storia della salvezza prima di Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento:", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia filosofica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lo spirito santo: mistero e presenza", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Perché credo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Esodo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia delle filosofie 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia cristiana", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Sul concetto della nuova teologia politica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patrologia Volume 4", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Iniziazione alla pratica della teologia (Pratica)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia filosofica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Ascolta, Israele Esegi di testi del Deuteronomio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Signore Gesù Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’evitico, numeri", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento alle lettere di San Paolo ai corinti", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Israele in epoca biblica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patrologia Volume 5", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della Filosofia, volume I", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis: la storia della salvezza prima di Cristo (pt.2)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Giovanni e i Sinottici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Deuteronomio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del Novecento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Alfabetica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La chiesa primizia del regno", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Morte e resurrezione", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia dell’Antico Testamento: i testi canonici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’attualità cristiana dell’Antico Testamento secondo il Nuovo Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Summa Theologica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia 3/1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "STORIA DELLA TEOLOGIA CRISTIANA 3", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis: L’evento Cristo (pt.1)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Giosuè,Giudici,Rut", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume III", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Papato e servizio petrino", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Famiglia et vita", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia dell’Antico Testamento: i temi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La visione di Stefano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Antropologia teologica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia 3/2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Trinità", autore: "", collocazione: "", argomento: "" },
+      { titolo: "San Gregorio Magno", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume IV", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Psicologia e pedagogia della fede", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Attualità di San Paolo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium salutis: L’evento Cristo (pt.2)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della lingua ebraica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Summa Theologica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "1-2 Samuele 1-2 Re", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il cristianesimo delle origini", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La moltiplicazione dei pani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Antropologia teologica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia 4", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia e Filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Amoris Leatitia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume V", autore: "", collocazione: "", argomento: "" },
+      { titolo: "1-2 Cronache Esdra e Neemia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia della parola", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis: L’evento salvifico nella comunità di Gesù Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gesù nostra speranza", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dio nel dolore, sulla validità degli argomenti della teodicea", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume VI", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Ester-Giuditta Tobia-Giona", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Storia della filosofia, volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al Vangelo di Giovanni Volume 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La filosofia Cristiana nei secoli XIX e XX 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Finestra su Gesù", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia e Chiesa 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dio nel progetto del mondo moderno", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "STORIA DELLA TEOLOGIA 3", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "1-2 Maccabei", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’unità della chiesa", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mysterium Salutis", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume III", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Commento al vangelo di Giovanni Volume 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana" },
+      { titolo: "Storia della filosofia, volume I", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Luca", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana" },
+      { titolo: "La filosofia Cristiana nei secoli XIX e XX (2)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La virtù della pazienza; A Donato", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’antropologia cristiana tra modernità e postmodernità", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Bioetica e famiglia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Enciclopedia Italiana" },
+      { titolo: "La filosofia Cristiana nei secoli XIX e XX 3", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Giovanni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dialoghi con un musulmano, VII discussione", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana" },
+      { titolo: "Storia della filosofia, volume IV", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Giobbe Salmi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dio, una domanda aperta. Pensare Dio nell’era della dimenticanza di Dio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al Vangelo di Giovanni Volume 3", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il linguaggio teologico", autore: "", collocazione: "", argomento: "" },
+      { titolo: "A Diogneto", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiana" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Le lettere di Giovanni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "A Demetriano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Familia et vita", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Proverbi Sapienza", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "Matteo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia, volume X", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Ruth", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Essere responsabili della fede, una teologia fondamentale", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Beneficenza e le Elemosine", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia Italiano" },
+      { titolo: "La trasformazione della missione", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Qoholet", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Omelie sui giudici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Salmi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Luca il vangelo del discepolo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Cantico dei cantici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Prospettive teologiche per il XXI secolo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Apologia per i cristiani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I e II Re", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Siracide", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il creatore trinitario. Teologia della Trinità e sinergia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Scienza e sapienza, scienza e Teologia in dialogo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il problema dell’educazione, volume I", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Manuale per mio figlio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il pensiero occidentale dalle origini ad oggi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Le origini del Nuovo Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al vangelo di Marco Volume 1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Summa Theologiae", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Narratologia del Nuovo Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il pensiero occidentale dalle origini ad oggi" },
+      { titolo: "Atti degli Apostoli", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Prospettive paoline", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia Fondamentale 2: fondamenti", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il pensiero occidentale dalle origini ad oggi 3", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gesù il Cristo nella fede della chiesa", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione dello studio della Bibbia S1", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al vangelo di Marco Volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Omelie su Qoelet", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il Deuteronomio e le sue interpretazioni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il problema dell’educazione, volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "STORIA DELLA TEOLOGIA - da Vitus Pichler a Henri de Lubac", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Scienze e Teologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Le Confessioni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della bibbia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia delle donne", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il dialogo con Nicodemo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Sposi e Santi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mistero della trasformazione. Tentativo di una escatologia tridimensionale, in dialogo con il pensiero ebraico e la filosofia contemporanea", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia Fondamentale 1: Epistemologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S4", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S3", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Romani vivere nello spirito santo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Isaia 1-39", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Difesa del cristianesimo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il linguaggio teologico. Come parlare di Dio, oggi?", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al vangelo di Luca", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia morale fondamentale", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione alla letteratura della bibbia ebraica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S6", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La domanda di Dio dell’uomo contemporaneo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il mistero del Dio vivente", autore: "", collocazione: "", argomento: "" },
+      { titolo: "1-2 Corinzi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Le \"scuole nuove\" e i loro problemi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Che cosa vogliamo potete?", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il Vangelo di Gesù Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S7", autore: "", collocazione: "", argomento: "" },
+      { titolo: "\"Saper portare il vino migliore\"", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia delle donne, volume 2. Da Ester ai Deuterocanonici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Sant’Agostino, Cristianesimo e Filosofia, Parte 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Ezechiele", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Resurrezione", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I presocratici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Galati Libertà e legge nella chiesa", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il sistema filosofico", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La missione Cristiana. Storia è Presente", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento a Giosuè e Giudici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La chiesa faccia il suo mestiere.  Con Cristo nella storia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al vangelo di san Luca Volume primo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "\"…fino agli estremi confini della terra\"", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dizionario di filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Daniele", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’eco dello spirito. Teologia della coscienza morale", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Maria madre di Gesù", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gesù Cristo nel nuovo testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Filippesi Colossesi Efesini Filemone", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia delle donne volume 3, le scritture apostoliche", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Breve catechesi sul matrimonio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Antologia del Novecento Teologico", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dio che viene all’uomo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I fratelli e le sorelle di Gesù", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gesù Cristo nella fede della chiesa" },
+      { titolo: "Contro il Fato", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Misea e Michea", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Le lettere Pastorali", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Linguaggio verità e logica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della Teologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S9", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia del pensiero, volume I", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La filosofia del concreto", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’apostolo e la sua comunità", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S8", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Chi è la chiesa?", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Sinergismo orientamento nei campi della filosofia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La famiglia è vita", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Amos", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Chiesa \"Il corpo Crismato\"", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lettera agli Ebrei messaggio ai cristiani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Filosofia e Teologia nel pensiero di Martin Heidegger", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della chiesa: La chiesa primitiva", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Messia e figlio di Dio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento alla lettera dei romani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Libro dei due Principi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Dio e la felicità", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il prete: a che serve?", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S11", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gli albori del cristianesimo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Breve storia della psicoterapia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Un Dio coinvolgente", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il sacrificio di Isacco", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S10", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia e storia: l'eredità del '900", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia del pensiero, volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "É l’amore che apre gli occhi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Nahum Sofonia Abacuc Lamentazioni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La mente umana alla prova di Dio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I poveri di spirito", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gesù Cristo nella fede della chiesa", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Vangelo di Marco", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Teologia per la missione oggi. Costanti nel contesto", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Sulla Passione, Morte e Risurrezione del Signore", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mariologia Sociale", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del sapere", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della chiesa 2 : Dalla metà del II secolo all’editto di Milano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "\"E Dio vide che era cosa buona\". Una Teologia della creazione", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Cosa ha detto veramente Hegel", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia del pensiero, volume III", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gioele Baruc Abdia Aggeo Zaccaria Malachia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La fenomenologia da Husserl a Merleau-Ponty", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia italiana (volume primo)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S14", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I nomi divini", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lettera ai Romani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S 12", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La famiglia allo specchio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia italiana (volume secondo)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lineamenti di antropologia patristica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Le nuove ecclesiologie", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della Chiesa 3: Dalla pace Costantiniana alla morte di Teodosio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S 17", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La spiritualità", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Che cos'è la Filosofia della Scienza, volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del sapere" },
+      { titolo: "I concetti fondamentali della Teologia. Volume 1 A-D", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L'ecllesiologia contemporanea", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il sacramento dell'ordine", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S 16", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Mistica Teologia e Epistole I-V", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I concetti fondamentali della teologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Grazia del sacramento delle Nozze", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del sapere" },
+      { titolo: "I concetti fondamentali della Teologia. Volume 3 M-R", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Istituzioni di Patrologia, Parte II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Teologia del XX secolo un bilancio - 1. Prospettive storiche", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I concetti fondamentali della teologia" },
+      { titolo: "Introduzione allo studio della Bibbia S 20", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lettera agli Efesini", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Vita e condotta dei cristiani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il Battesimo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della Chiesa 4: Dalla morte di teodosio all’avvento di S. Gregorio Magno", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gli albori del cristianesimo" },
+      { titolo: "Introduzione alla storia della Bibbia S19", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L'escatologia contemporanea", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’Antico Testamento e Gesù Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Penitenza", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I concetti Teologici fondamentali dell’antico testamento del nuovo testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lettere di Pietro Giacomo e Giuda", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La famiglia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gli albori del Cristianesimo" },
+      { titolo: "Lettera ai Filippesi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La lettera ai Romani", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia, S15", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del sapere" },
+      { titolo: "La voce dei SS. Padri, Volume I", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I salmi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Cosmologia e Antropologia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La famiglia" },
+      { titolo: "Ermeneutica filosofica ed ermeneutica biblica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Teologia del XX secolo un bilancio - 2. Prospettive sistematiche", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del sapere" },
+      { titolo: "All’ombra di Dio", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Questione previa contro gli eretici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S22", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Enciclopedia del sapere" },
+      { titolo: "Storia della chiesa :dalle origini al secolo VIII", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I cristiani nella società", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Alla ricerca di Mosè", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Vita di coppia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lettera agli Ebrei", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Voce dei SS. Padri, Volume II", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Creazione e male del cosmo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Šālǒm", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S23", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La scuola cattolico- liberale", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Identità della Bibbia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Alla sposa", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della Chiesa:dal potere temporale dei papi a bonifacio VIII", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Teologia del XX secolo un bilancio - 3. Prospettive pratiche", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Umanità e Divinità di Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’introduzione allo studio della Bibbia S24", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Galilea", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della filosofia italiana (volume terzo)", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Cronache", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il Dio dei filosofi e degli scienziati, volume XV", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La Bibbia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Diamo corda all’amore!", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della chiesa: dai pontefici di Avignone a Pio XII", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Omelie su Ezechiele /2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Introduzione allo studio della Bibbia S26", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Panorama storico del Nuovo Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gli antichi greci", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commento al cantico dei cantici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "L’unità dell’intelletto e L’eternità del mondo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Pico della Mirandola", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Panorama letterario del Nuovo Testamento", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Storia della chiesa:dai pontefici di Avignone a Pio XII", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il nuovo Gesu storico", autore: "", collocazione: "", argomento: "" },
+      { titolo: "La passione di Cristo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commentario Teologico del Nuovo Testamento: La lettera agli Efesini", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Panorama teologico del Nuovo Testamento 2", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Testi contemporanei al messaggio pasquale dei vangeli", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Il mezzogiorno e lo stato unitario", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Credo nello Spirito Santo - rivelazione e esperienza dello spirito", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I cristiani e la loro storia", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Bilancio della teologia dell'XX secolo - 1 il mondo contemporaneo", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Gli Esseni", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Patrologia" },
+      { titolo: "Fine professione e perfezione del cristiano", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Lessico della scienza biblica", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Leopardi", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Démonstration Rationelle des fondements de la fois catholique", autore: "", collocazione: "", argomento: "" },
+      { titolo: "I Due mondi Sinai e Sion", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Commentario al cantico dei cantici", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Cento considerazioni sulla fede", autore: "", collocazione: "", argomento: "" },
+      { titolo: "Le Confessioni", autore: "", collocazione: "", argomento: "" },
+  ]
+    const authorsInOrder = [
+      "Agostino",
+      "Berthold Altaner",
+      "Carlo Rocchetta",
+      "A. M. Charue",
+      "Diego Manetti, Stefano Zuffi",
+      "Bernard Lauret - François Refoulé",
+      "Giovanni Treccani",
+      "Diego Manetti, Stefano Zuffi",
+      "Diego Manetti, Stefano Zuffi",
+      "Johannes Quasten",
+      "Rino Fisichella",
+      "Mario Cimosa",
+      "Jacques Leclercq",
+      "Gabriele De Rosa",
+      "Istituto per la collaborazione culturale",
+      "Johannes Feiner e Magnus Löhrer",
+      "S.Thomae Aquinatis",
+      "Diego Manetti, Stefano Zuffi",
+      "Giovanni Treccani",
+      "Robert Michaud",
+      "Gabriele De Rosa",
+      "Bernard Lauret - François Refoulé",
+      "Louis Guittard",
+      "Johannes Quasten",
+      "Giovanni Treccani",
+      "Evangelista Vilanova",
+      "Angelo Amato",
+      "Giovanni Treccani",
+      "Bernard Lauret - François Refoulé",
+      "Pio De Mandato Soc.Iesu",
+      "Joseph Comblin",
+      "Johannes Feiner e Magnus Löhrer",
+      "Giovanni Treccani",
+      "Institutum Patristicum Augustinianum",
+      "Rolf Rendtorff",
+      "Istituto per la collaborazione culturale",
+      "Antonio Bonora",
+      "G. Casertano- A. Montano - G. Tortora",
+      "Giovanni Treccani",
+      "Lino Randellini",
+      "Bernard Lauret - François Refoulé",
+      "Evangelista Vilanova",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Johannes Feiner e Magnus Löhrer",
+      "Giovanni Treccani",
+      "Istituto per la collaborazione culturale",
+      "Francesco Lambiasi",
+      "W. Kern - F. J. Schierse - G. Stachel",
+      "Gianfranco Ravasi",
+      "G. Casertano- A. Montano - G. Tortora",
+      "Alister E. McGrath",
+      "Johann Baptist Metz",
+      "Institutum Patristicum Augustinianum",
+      "Bernard Lauret - François Refoulé",
+      "Giovanni Treccani",
+      "Istituto per la collaborazione culturale",
+      "Giovanni Treccani",
+      "Norbert Lohfink",
+      "L’arte W. Hurtado",
+      "Giovanni Treccani",
+      "Giovanni reccani",
+      "Autori vari",
+      "Mario Cimosa",
+      "Giovanni Treccani",
+      "San Giovanni Crisostomo",
+      "J. Alberto Soggi",
+      "Institutum Patristicum Augustinianum",
+      "Frederick Copleston",
+      "Giovanni Treccani",
+      "Johannes Feiner e Magnus Löhrer",
+      "Giovanni Treccani",
+      "Josef Blinzer",
+      "Richard Clifford",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Battista Mondin",
+      "Franz Mussner",
+      "Rolf Rendtorff",
+      "C. Larcher",
+      "Thomae Aquinatis",
+      "Felix Garcia Lopez",
+      "Frederick Copleston",
+      "Evangelista Vilanova",
+      "Giovanni Treccani",
+      "Johannes Feiner e Magnus Löhrer",
+      "Nicola Abbagnano",
+      "Giovanni Treccani",
+      "Giuseppe Crocetti",
+      "Frederick Copleston",
+      "Heinrich Stirnimann - Lukas Vischer",
+      "Pontificio Consiglio per la Famiglia",
+      "Rolf Rendtorff",
+      "Rudolf Pesch",
+      "Nicola Abbagnano",
+      "Gianni Colzani",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Autori vari",
+      "Karl Rahner",
+      "H. Grisar",
+      "Frederick Copleston",
+      "Miguel Nicolau",
+      "Nicola Abbagnano",
+      "Charles Harold Dodd",
+      "Johannes Feiner e Magnus Löhrer",
+      "Ángel Sáenz-Badillos",
+      "San Tommaso",
+      "Giovanni Treccani",
+      "Giuseppe Crocetti",
+      "Giovanni Treccani",
+      "Francois Vouga",
+      "Giovanni Treccani",
+      "Alkuin Heising",
+      "Nicola Abbagnano",
+      "Battista Mondin",
+      "Giovanni Treccani",
+      "José Maria Abrego de Lacy",
+      "Giovanni Treccani",
+      "Wolfhart Pannenberg",
+      "Facoltà di Teologia della Pontificia Università Lateranense",
+      "Giovanni Treccani",
+      "Frederick Copleston",
+      "Romeo Cavedo",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Semmelroth",
+      "Johannes Feiner e Magnus Löhrer",
+      "Marcello Bordoni/Nicola Ciola",
+      "Armin Kreiner",
+      "Frederick Copleston",
+      "Giovanni Treccani",
+      "John Craghan",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Guido De Ruggiero",
+      "Giovanni Crisostomo",
+      "Gaspare mura e Giorgio Penzo",
+      "Wim Weren",
+      "Walter Kasper",
+      "Jürden Moltmann",
+      "Giovanni Treccani",
+      "Rino Fisichella",
+      "Giovanni Treccani",
+      "Emiliano Vallauri",
+      "Copriano di Cartagine",
+      "Johannes feiner e Magnus löhrer",
+      "Guido De Ruggiero",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Giovanni Crisostomo",
+      "Giovanni Treccani",
+      "Guido De Ruggiero",
+      "Fred B Craddock",
+      "Giovanni Treccani",
+      "Gaspare Mura e Giorgio Penzo",
+      "Cipriano di Cartagine",
+      "Ignazio Sanna",
+      "Maria Luisa Di Pietro",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "Gaspare Mura e Giorgio Penzo",
+      "Gerard Sloyan",
+      "Manuele Il Paleologo",
+      "Giovanni Treccani",
+      "Guido de Ruggiero",
+      "Giovanni Treccani",
+      "Roland E. Murphy",
+      "Anton W.J. Houtepen",
+      "Giovanni Crisostomo",
+      "Battista Mondin",
+      "Ignoto",
+      "Giovanni Treccani",
+      "Giovanni Treccani",
+      "D. Moody Smith",
+      "Cipriano di Cartagine",
+      "Pontificio Consiglio per la Famiglia",
+      "Antonio Bonora",
+      "Giovanni Treccani",
+      "Giuseppe Danieli",
+      "Guido De Ruggiero",
+      "Katharine Doob Sakenfeld",
+      "Jurgen Werbick",
+      "Cipriano di Cartagine",
+      "Giovanni Treccani",
+      "David J. Bosch",
+      "Antonio Bonora",
+      "Origene",
+      "James L. Mays",
+      "Mario Masini",
+      "Dalmazio colombo",
+      "Rosino Gibellini (ed.)",
+      "Giustino",
+      "Richard D. Nelson",
+      "Antonino Minissale",
+      "Alexandre Ganoczy",
+      "Jurgen Moltmann",
+      "Ernesto Codignola",
+      "Dhuoda",
+      "Giovanni Reale/ Dario Antiseri",
+      "Charles Fr. D. Moule",
+      "Beda Il Venerabile",
+      "Tommaso D’acquino",
+      "James L. Resseguie",
+      "Giovanni Reale/Dario Antiseri",
+      "Rinaldo Fabris",
+      "Ernst Käsemann",
+      "Giuseppe Lorizio, Donato Hercsik, Mariano Crociata, Calogero Caltagirone, Rino Fisichella",
+      "Giovanni Reale/Dario Antiseri",
+      "AlloisGrillmeier",
+      "Brucie Metzger",
+      "Beda Il Venerabile",
+      "Gregorio di Nissa",
+      "Friedrich Blass",
+      "Sigrid Loersch",
+      "Ernesto Codignola",
+      "Rino Fisichella",
+      "Calogero Caltagirone",
+      "S. Agostino",
+      "Alexander Rofé",
+      "Carol A. Newsom e Sharon H. Ringe",
+      "Giancarlo Gaeta",
+      "Ludmila e Stanislaw Grygiel",
+      "Josef Wohlmuth",
+      "L’ubomir Zak, Pierluigi Sguazzardo, Antonio Sabetta, Giuseppe Lorizio",
+      "Wolfgang Schrage",
+      "Brucie Metzger",
+      "Lorenzo De Lorenzi",
+      "Felice montagnini",
+      "Tertulliano",
+      "Battista Mondin",
+      "Origene",
+      "Cataldo Zuccaro",
+      "Alexander Rofé",
+      "Natalio Fernandez Markoss",
+      "Hans Urs Von Balthasar",
+      "Antonio Staglianò",
+      "Giuseppe Barbaglio",
+      "Ernesto Codignola",
+      "Dietmar mieth",
+      "Walter Kasper",
+      "Herbert Niehr",
+      "Juan José Perez-Soba",
+      "Carol A. Newsom, Sharon H. Ringe, Teresa Franzosi",
+      "Domenico Vircillo",
+      "Luciano Montari",
+      "Berten, Boismard, Bouttier, Carrez, Duquoc, Geffrè, Moingt",
+      "Editori la terza",
+      "Giovanni Giavini",
+      "G. W. F. Hegel",
+      "Michael Sievernich",
+      "Eliseo D’Armeno",
+      "Santo Quadri",
+      "Sant' Ambrogio",
+      "Giancarlo collet",
+      "Dagobert D.Runes",
+      "Benito Marconcini",
+      "Aristide Fumagalli",
+      "Stefano De Fiores",
+      "Martin Karrer",
+      "Mario Masini",
+      "Carol A. Newsom e Sharon H. Ringe",
+      "Antonio Maria Sicari e Luigi Giussani (prefazione)",
+      "Rosino Gibellini (ed.)",
+      "Joseph moingt",
+      "Josef Blinzer",
+      "Alois Grillmeier",
+      "Bardesane",
+      "Antonio Fanuli",
+      "Rinaldo Fabris",
+      "Alfred J. Ayer",
+      "Jean-Yves Lacoste (ed.)",
+      "Andre Lacocque Paul Ricoeur",
+      "A. Plebe",
+      "Flavio Mei",
+      "Heinrich Schlier",
+      "Marie-Francoise Baslez",
+      "Angelo Scola",
+      "Manfredo Baronchelli",
+      "Ennio Antonelli",
+      "Antonio Bonora",
+      "Cettina Militello",
+      "Mario Masini",
+      "Philippe Capelle-Dumont",
+      "L.I.C.E.- R.BERRUTI & C.",
+      "Anton Vögtle",
+      "Ambrosiaster",
+      "Anonimo Cataro",
+      "Jörg Lauster",
+      "Severino Dianich",
+      "Johann Maier",
+      "James Dunn",
+      "Nigel Walker",
+      "Jurgen Werbick",
+      "Rudolf Kilian",
+      "Florentino Garcia Martinez",
+      "Giacomo Canobbio",
+      "A. Plebe",
+      "Jorge Mario Bergoglio",
+      "Antonio Bonora",
+      "Antonio Staglianò",
+      "Simon Légasse",
+      "Alois Grillmeier",
+      "Santi Grasso",
+      "Stephen B. Bevans - Roger P. Schroeder",
+      "Eliseo D’Armeno",
+      "Clodovis M. Boff",
+      "Autori Western educational library",
+      "L.I.C-E-R. BERRUTI & C.",
+      "Medard Kehl",
+      "A.Plebe",
+      "A. Plebe",
+      "Giovanni Boggio",
+      "Pierre Thévenaz",
+      "Eugenio Garin",
+      "Anthony Saldarini",
+      "Dionigi",
+      "Antonio Pitta",
+      "Joachim Gnilka",
+      "Giovanni Panettiere",
+      "Eugenio Garin",
+      "Vittorino Grossi",
+      "Battista Mondin",
+      "L.I.C-E- R.BERRUTI & C.",
+      "John Barclay",
+      "Kees Waaijman",
+      "S. Toulmin",
+      "Autori Western educational library",
+      "Peter Eicher (ed.)",
+      "Donato Valentini",
+      "Autori vari XXXVII incontro di studio Centro Pio X-Borca di Cadore (BL)",
+      "Joachim Gnilka",
+      "Dionigi",
+      "Peter Eicher",
+      "Renzi Bonetti e Francesco Pilloni",
+      "Autori Western educational library",
+      "Peter Eicher (ed.)",
+      "Mons. Ubaldo Mannucci",
+      "Giacomo Canobbio - Piero Coda",
+      "Peter Eicher",
+      "Lee I. Levine",
+      "Stefano Romanello",
+      "Heinz-Dietrich Wendland",
+      "Tertulliano",
+      "L.I.C-E.- R.BERRUTI & C.",
+      "James dunn",
+      "Baruch Halpern",
+      "Giacomo Canobbio e Mario Fini",
+      "Claus Westermann",
+      "Tertulliano",
+      "Angelika Berlejung - Christian Frevel (edd.)",
+      "Ugo Vanni",
+      "Vincenzo Paglia e Antonio Sciortino",
+      "james dunn",
+      "Antonio Pitta",
+      "Giovanni Torti",
+      "Horst Balz Gerhard Schneider",
+      "Autori Western educational library",
+      "Can. Parr. A. Aureli e Sac. G. Brunner",
+      "Mario Masini",
+      "Giovanni Ancona",
+      "Vincenzo Paglia e Antonio Sciortino",
+      "Paul Ricoeur",
+      "Giacomo Canobbio - Piero Coda",
+      "Autori Western education library",
+      "Micheal Walzer",
+      "Tertulliano",
+      "Gerd Theissen",
+      "Autori western educational library",
+      "Agostino Saba",
+      "Gerard Defois",
+      "Henri Cazelles",
+      "Michele L’avrà",
+      "Cesare Marcheselli-Casala",
+      "Can. Parr. A. Aureli e Sac. G. Brunner",
+      "Gianni Colzani",
+      "Hans Heinrich Schmid",
+      "Rainer Albertz",
+      "Francesco de Sanctis",
+      "Tullio Citrini",
+      "Tertulliano",
+      "Agostino Saba",
+      "Giacomo Canobbio, Piero Coda",
+      "Massimo il Confessore",
+      "Rainer Albertz",
+      "Richard A. Horsley",
+      "Eugenio Garin",
+      "Tiziano Lorenzin",
+      "Régis Jolivet",
+      "Carlo Buzzetti",
+      "Renzo Bonetti",
+      "Agostino Saba",
+      "Gregorio Magno",
+      "Harry Y. Gamble",
+      "Giuseppe Segalla",
+      "Moses I. Finley",
+      "Origene",
+      "Tommaso D’Aquino",
+      "Henri de Lubac",
+      "Giuseppe Segalla",
+      "A. Saba",
+      "Wolfgang Stegemann",
+      "Gregorio Nazianzeno",
+      "Heinrich Schlier",
+      "Giuseppe Segalla",
+      "Philipp Seidensticker",
+      "Francesco de Sanctis",
+      "Yves Congar",
+      "Joseph Doré",
+      "Autori Vari - diretto da R. Vander Gucht, H. Vorgrimler",
+      "Ernest-M. Laperrousaz",
+      "Berthold Altaner",
+      "Gregorio Di Nissa",
+      "Paul-Gerhard Müller",
+      "Francesco de Santis",
+      "É. Valvekens",
+      "Pseudo Cipriano, a cura di Clara Burini",
+      "Origene",
+      "Diadoco",
+      "Agostino",
+    ];
+
+    const collocazioniInOrder = [
+      "H3, n°2",
+      "Q1, n°1",
+      "M3",
+      "N",
+      "E2, n°64",
+      "M2",
+      "B2, n°1",
+      "E2, n°65",
+      "E2, n°66",
+      "Q1, n°2",
+      "M3",
+      "G1, n°1",
+      "N4",
+      "P1, n°1",
+      "P2",
+      "I1",
+      "D2, n°1",
+      "E2, n°67",
+      "B2, n°2",
+      "G1, n°2",
+      "P1, n°2",
+      "M2",
+      "N4",
+      "Q1, n°3",
+      "B2, n°3",
+      "M1",
+      "M3",
+      "A1, n°1",
+      "M3",
+      "D2, n°2",
+      "N4",
+      "I1",
+      "B2, n°4",
+      "Q1, n°4",
+      "E4, n°2",
+      "P2",
+      "G1, n°3",
+      "P1, n°3",
+      "A1, n°2",
+      "E2, n°1",
+      "M2",
+      "M1",
+      "B2, n°5",
+      "B1, nº1",
+      "A2, n°1",
+      "I1",
+      "A1, n°3",
+      "P2",
+      "M3",
+      "N4",
+      "G1, n°4",
+      "P1, n°4",
+      "E4, n°1",
+      "L3",
+      "Q1, n°5",
+      "M2",
+      "A1, n°4",
+      "P2",
+      "B1, nº2",
+      "E2, n°2",
+      "D4, n°1",
+      "B2, n°6",
+      "A2, n°2",
+      "D3, n°1",
+      "G1, n°5",
+      "A1. n°5",
+      "D2, n°3",
+      "E4, n°3",
+      "Q1, n°6",
+      "P1, n°5",
+      "A1, n°6",
+      "I1",
+      "B1, nº3",
+      "E2, n°3",
+      "G1, n°6",
+      "A1, n°7",
+      "B2, n°7",
+      "M3",
+      "E2, n°4",
+      "E4, n°4",
+      "N4",
+      "D2, n°4",
+      "D3; n°2",
+      "P1, n°6",
+      "M1",
+      "A1, n°8",
+      "I1",
+      "P2",
+      "A1, n°9",
+      "G1, n°7",
+      "P1, n°7",
+      "M2",
+      "N2, n°1",
+      "E4, n°5",
+      "E2, n°5",
+      "P2",
+      "M3",
+      "B2, n°8",
+      "A2, n°3",
+      "A1, n°10",
+      "B1, nº4",
+      "D3, n°3",
+      "L3",
+      "Q1, n°7",
+      "P1, n°8",
+      "N4",
+      "P2",
+      "E2, n°6",
+      "I1",
+      "D4, n°2",
+      "D2, n°5",
+      "A1, n°11",
+      "G1, n°8",
+      "B2, n°9",
+      "E4, n°6",
+      "A2, n°4",
+      "E2, n°7",
+      "P2",
+      "M2",
+      "B1, nº5",
+      "D3, n°4",
+      "A1, n°12",
+      "L3",
+      "N2, n°2",
+      "A2, n°5",
+      "P1, n°9",
+      "G1, n°9",
+      "B2, n°10",
+      "B1, nº6",
+      "N4",
+      "I1",
+      "M3",
+      "L3",
+      "P1, n°10",
+      "A2, n°6",
+      "G1, n°10",
+      "B1, nº 7",
+      "B2, n °11",
+      "P1, n°11",
+      "Q1, n°8",
+      "P2",
+      "E4, n°7",
+      "L3",
+      "L3",
+      "A2, n°7",
+      "M1",
+      "B1, nº8",
+      "G1, n°11",
+      "Q1, n°1",
+      "I1",
+      "P1, n°12",
+      "B1, nº9",
+      "B2, n°12",
+      "Q1, n°9",
+      "A2, n°8",
+      "P1, n°13",
+      "E4, n°8",
+      "B1, nº10",
+      "P2",
+      "Q2, n°2",
+      "L3",
+      "N2, n°3",
+      "B2, n°13",
+      "B1, nº11",
+      "A2, n°9",
+      "P2",
+      "E4, n°9",
+      "Q2, n°3",
+      "B1, nº12",
+      "P1, n°14",
+      "A2, n°10",
+      "G1, n°12",
+      "L3",
+      "Q1, n°10",
+      "M2",
+      "Q2, n°4",
+      "B1, nº13",
+      "A2, n°11",
+      "E4, n°10",
+      "Q2, n°5",
+      "N2 , n°4",
+      "G1, n°13",
+      "A2, n°12",
+      "G1, n°24",
+      "P1, n°15",
+      "E4, n°11",
+      "L3",
+      "Q2, n°7",
+      "A2, n°13",
+      "L3",
+      "G1, n°14",
+      "Q2, n°9",
+      "E4, n°12",
+      "G1, n°25",
+      "G1, n°15",
+      "L3",
+      "Q2, n°10",
+      "E4, n°13",
+      "G1, n°16",
+      "L3",
+      "L3",
+      "P1, n°16",
+      "Q2, n°13",
+      "P2",
+      "E2, n°8",
+      "Q1, n°11",
+      "D2, n°8",
+      "D4, n°3",
+      "P2",
+      "G1, S1, N26",
+      "E2, n°9",
+      "I1",
+      "P2",
+      "N1, n°1",
+      "D3, n°5",
+      "Q1, n°12",
+      "Q2, n°11",
+      "D3, n°6",
+      "E2, n°10",
+      "P1, n°16",
+      "M1",
+      "M3",
+      "H3, n°1",
+      "D4, n°9",
+      "E4, n°23",
+      "E2, n°11",
+      "N2, n°5",
+      "L3",
+      "I1",
+      "D3, n°8",
+      "D3, n°7",
+      "G1, n°27",
+      "G1, n°17",
+      "Q2, n°14",
+      "M2, n°8",
+      "Q1, n°13",
+      "L3",
+      "D4, n°10",
+      "D3, n°9",
+      "L3",
+      "M3",
+      "G1, n°28",
+      "P1, n°17",
+      "L3",
+      "L3",
+      "D3, n°10",
+      "N2, n°6",
+      "E4, n°24",
+      "D2, n°12",
+      "G1, n°18",
+      "E2, n°12",
+      "P2",
+      "G1, n°29",
+      "P1, n°18",
+      "L3",
+      "Q2, n°15",
+      "M2, n°9",
+      "Q1, n°14",
+      "L3",
+      "P2",
+      "G1, n°19",
+      "L3",
+      "M3",
+      "D4, n°11",
+      "G1, n°30",
+      "E4, n°25",
+      "N2, n°7",
+      "L3",
+      "L3",
+      "E2, n°13",
+      "N1, n°2",
+      "Q2, n°16",
+      "G1, n°20",
+      "G1, n°31",
+      "P1, n°23",
+      "L3",
+      "D3, n°12",
+      "P1, n°19",
+      "P2",
+      "E2, n°14",
+      "D9, n°11",
+      "L3",
+      "P2",
+      "N2, n°8",
+      "G1, n°20",
+      "M3",
+      "G1, n°32",
+      "L3",
+      "I1",
+      "E2, n°15",
+      "D2, n°12",
+      "Q2, n°17",
+      "L3",
+      "M2, n°10",
+      "D3, n°14",
+      "D4, n°11",
+      "P1, n°24",
+      "L3",
+      "E2, n°16",
+      "D3, n°13",
+      "M1, n°5",
+      "P1, n°20",
+      "N2, n°9",
+      "G1, n°22",
+      "M3, n°11",
+      "E2, n°17",
+      "N1, n°3",
+      "E4, n°26",
+      "L3",
+      "Q2, n°18",
+      "L3",
+      "A3, n°1",
+      "I1",
+      "L3",
+      "P2",
+      "P1, n°21",
+      "G1, n°23",
+      "P2",
+      "P1, n°25",
+      "D3, n°16",
+      "Q2, n°19",
+      "E4, n°27",
+      "D3, n°15",
+      "N2, n°10",
+      "P1, n°26",
+      "Q1, n°15",
+      "M2, n°11",
+      "I1",
+      "D3, n°19",
+      "L3",
+      "P1, n°22",
+      "A3, n°2",
+      "L3",
+      "M3, n°13",
+      "N1, n°4",
+      "D3, n°18",
+      "Q2, n°20",
+      "L3",
+      "N2, n°11",
+      "A3, n°3",
+      "L3",
+      "Q1, n°16",
+      "M1, n°6",
+      "L3",
+      "D3, n°21",
+      "E4, n°28",
+      "E2, n°18",
+      "Q2, n°21",
+      "I1",
+      "D9, n°13",
+      "D3, n°20",
+      "M3, n°14",
+      "E2, n°19",
+      "Q2, n°22",
+      "L3",
+      "G1, n°33",
+      "N2, n°12",
+      "D4, n°14",
+      "E4, n°29",
+      "E2, n°20",
+      "D3, n°17",
+      "A3, n°4",
+      "Q1, n°17",
+      "G1, n°34",
+      "M3, n°15",
+      "N2, n°12",
+      "E2, n°21",
+      "M1, n°7",
+      "A3, n°5",
+      "D9, n°15",
+      "Q2, n°23",
+      "D3, n°23",
+      "A3, n°6",
+      "I1",
+      "M2, n°12",
+      "G1, n°35",
+      "N2, n°13",
+      "E4, n°30",
+      "Q1, n°18",
+      "M3, n°16",
+      "E2, n°22",
+      "D3, n°24",
+      "N1, n°5",
+      "G1, n°36",
+      "Q2, n°24",
+      "I1",
+      "M1, n°8",
+      "I4, n°19",
+      "D3, n°25",
+      "D4, n°16",
+      "P1, n°27",
+      "E4, n°31",
+      "P1, n°30",
+      "G1, n°37",
+      "N2, n°14",
+      "I1",
+      "I4, n°18",
+      "D3, n°26",
+      "G1, n°38",
+      "P1, n°28",
+      "I4, n°1",
+      "Q2, n°25",
+      "P2",
+      "G1, n°39",
+      "I1",
+      "D4, n°17",
+      "I4, n°16",
+      "E4, n°32",
+      "G1, n°40",
+      "E2, n°23",
+      "N1, n°6",
+      "M3, n°17",
+      "M2, n°13",
+      "M1, n°9",
+      "G1, n°41",
+      "Q1, n°19",
+      "I4, n°15",
+      "G1, n°42",
+      "N1, n°6",
+      "Q1, n°20",
+      "Q2, n°26",
+      "Q2, n°27",
+      "I4, n°13",
+      "H3, nº3",
+    ];
+
+    const argomentiInOrder = [
+      "Spirituale",
+      "Teologico", 
+      "Teologico",
+      "Spirituale",
+      "Teologico",
+      "Teologico",
+      "Scritturistico",
+      "Teologico",
+      "Teologico",
+      "Dogmatico",
+      "Teologico",
+      "Esegetico",
+      "Esegetico",
+      "Scritturistico",
+      "Filosofico",
+      "Dogmatico, Teologico",
+      "Teologico, Dogmatico",
+      "Teologico",
+      "Scritturistico",
+      "Esegetico",
+      "Scritturistico",
+      "Teologico",
+      "Spirituale",
+      "Dogmatico",
+      "Scritturistico",
+      "Teologico",
+      "Dogmatico, Pastorale, Spirituale, Teologico",
+      "Scritturistico",
+      "Teologico",
+      "Spirituale",
+      "Teologico",
+      "Dogmatico, Teologico",
+      "Scritturistico",
+      "Dogmatico",
+      "Esegetico, Teologico",
+      "Scritturistico",
+      "Esegetico",
+      "Filosofico, Storico",
+      "Scritturistico",
+      "Scritturistico",
+      "Teologico",
+      "Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Scritturistico",
+      "Teologico, Dogmatico",
+      "Scritturistico",
+      "Scritturistico",
+      "Dogmatico, Spirituale, Teologico",
+      "Spirituale",
+      "Esegetico",
+      "Scritturistico",
+      "Teologico",
+      "Teologico",
+      "Dogmatico",
+      "Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Scritturistico",
+      "Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Scritturistico",
+      "Scritturistico",
+      "Esegetico",
+      "Scritturistico",
+      "Teologico",
+      "Esegetico",
+      "Dogmatico",
+      "Storico, Filosofico",
+      "Scritturistico",
+      "Dogmatico, Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Esegetico",
+      "Scritturistico",
+      "Scritturistico",
+      "Esegetico, Storico, Teologico",
+      "Teologico, Scritturistico",
+      "Esegetico, Teologico",
+      "Scritturistico",
+      "Teologico, Dogmatico",
+      "Scritturistico",
+      "Filosofico, Storico",
+      "Teologico, Storico",
+      "Scritturistico",
+      "Teologico, Letterario",
+      "Filosofico",
+      "Scritturistico",
+      "Esegetico",
+      "Filosofico, Storico",
+      "Teologico",
+      "Pastorale",
+      "Teologico",
+      "Teologico, Scritturistico",
+      "Filosofico",
+      "Storico, Socioloco, Teologico, Filosofico",
+      "Scritturistico",
+      "Culturale",
+      "Scritturistico",
+      "Scritturistico",
+      "Scritturistico",
+      "Spirituale, Teologico",
+      "Storico",
+      "Filosofico, Storico",
+      "Psicologo, Pedagogico", 
+      "Filosofico",
+      "Teologico, Scritturistico",
+      "Dogmatico, Teologico",
+      "Scritturistico",
+      "Teologico, Dogmatico",
+      "Culturale",
+      "Esegetico",
+      "Scritturistico",
+      "Teologico, Esegetico",
+      "Culturale",
+      "Scritturistico, Teologico",
+      "Filosofico",
+      "Teologico",
+      "Scientifico, Culturale",
+      "Scritturistico",
+      "Culturale, Scientifico",
+      "Esegetico, Filosofico, Teologico",
+      "Spirituale, Dogmatico, Filosofico, Pastorale",
+      "Culturale",
+      "Storico, Filosofico",
+      "Esegetico",
+      "Scritturistico, Culturale",
+      "Culturale, Scientifico",
+      "Filosofico, Teologico",
+      "Teologico, Dogmatico",
+      "Etico, Teologico, Filosofico, Dogmatico, Spirituale, Culturale, Pastorale",
+      "Teologico",
+      "Storico, Filosofico",
+      "Culturale, Scientifico",
+      "Esegetico",
+      "Culturale, Scientifico",
+      "Scritturistico, Culturale, Scientifico",
+      "Storico, Filosofico",
+      "Esegetico",
+      "Filosofico",
+      "Teologico, Esegetico",
+      "Teologico",
+      "Teologico",
+      "Culturale, Scientifico",
+      "Teologico, Dogmatico, Storico",
+      "Culturale, Scientifico",
+      "Esegetico",
+      "Teologico",
+      "Dogmatico, Teologico",
+      "Filosofico, Storico",
+      "Culturale, Scientifico",
+      "Scritturistico, Scientifico, Culturale",
+      "Esegetico",
+      "Scientifico, Culturale",
+      "Filosofico, Storico",
+      "Teologico, Esegetico",
+      "Culturale, Scientifico",
+      "Filosofico",
+      "Teologico, Spirituale",
+      "Teologico",
+      "Etico, Scientifico",
+      "Scritturistico, Scientifico, Culturale",
+      "Scientifico, Culturale",
+      "Scientifico, Culturale",
+      "Filosofico",
+      "Esegetico, Teologico",
+      "Spirituale",
+      "Scientifico, Culturale",
+      "Filosofico, Storico",
+      "Culturale, Scientifico",
+      "Esegetico",
+      "Teologico",
+      "Esegetico",
+      "Teologico",
+      "Spirituale",
+      "Scientifico, Culturale",
+      "Culturale, Scientifico",
+      "Teologico, Esegetico",
+      "Spirituale, Teologico",
+      "Pastorale",
+      "Esegetico",
+      "Scientifico, Culturale",
+      "Esegetico",
+      "Storico, Filosofico",
+      "Esegetico, Teologico",
+      "Teologico",
+      "Teologico, Spirituale",
+      "Scientifico, Culturale",
+      "Spirituale, Teologico, Culturale",
+      "Esegetico",
+      "Spirituale, Teologico",
+      "Esegetico, Teologico, Spirituale",
+      "Esegetico",
+      "Esegetico",
+      "Teologico",
+      "Storico, Teologico",
+      "Esegetico, Teologico",
+      "Esegetico",
+      "Teologico",
+      "Teologico",
+      "Filosofico, Etico, Pedagogico",
+      "Storico, Spirituale",
+      "Filosofico",
+      "Scritturistico",
+      "Esegetico",
+      "Etico, Teologico, Dogmatico, Filosofico",
+      "Scritturistico, Teologico",
+      "Filosofico",
+      "Esegetico",
+      "Scritturistico",
+      "Teologico, Culturale",
+      "Filosofico",
+      "Teologico",
+      "Scritturistico",
+      "Esegetico",
+      "Teologico, Spirituale",
+      "Scritturistico",
+      "Scritturistico",
+      "Filosofico, Etico, Pedagogico", 
+      "Teologico, Storico",
+      "Culturale, Scientifico, Teologico, Storico, Socioloco",
+      "Spirituale, Psicologo, Teologico, Filosofico",
+      "Scritturistico",
+      "Esegetico, Teologico, Culturale",
+      "Scritturistico",
+      "Pastorale, Spirituale",
+      "Teologico",
+      "Culturale, Storico, Dogmatico, teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Esegetico",
+      "Esegetico",
+      "Teologico, Spirituale",
+      "Culturale, Teologico",
+      "Esegetico",
+      "Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Teologico",
+      "Filosofico, Socioloco, Teologico, Dogmatico",
+      "Esegetico",
+      "Culturale, Etico, Pedagogico", 
+      "Etico, Culturale, Teologico",
+      "Teologico",
+      "Scritturistico",
+      "Pastorale, Spirituale",
+      "Storico, Esegetico, Culturale",
+      "Teologico, Filosofico, Culturale",
+      "Esegetico",
+      "Scritturistico",
+      "Filosofico",
+      "Esegetico",
+      "Filosofico",
+      "Teologico",
+      "Teologico, Spirituale",
+      "Teologico",
+      "Esegetico",
+      "Teologico, Storico, Letterario, Culturale",
+      "Filosofico",
+      "Esegetico",
+      "Teologico",
+      "Teologico, Scritturistico, Dogmatico, Spirituale",
+      "Scritturistico",
+      "Esegetico",
+      "Scritturistico, Storico, Culturale, Esegetico",
+      "Spirituale, Dogmatico, Pastorale",
+      "Teologico",
+      "Spirituale, Teologico",
+      "Scritturistico",
+      "Teologico",
+      "Spirituale, Culturale",
+      "Esegetico",
+      "Esegetico",
+      "Filosofico",
+      "Teologico",
+      "Scritturistico",
+      "Storico",
+      "Filosofico",
+      "Scritturistico",
+      "Scritturistico",
+      "Pastorale, Teologico, Culturale",
+      "Filosofico",
+      "Pastorale, Spirituale",
+      "Esegetico",
+      "Spirituale, Socioloco, Teologico",
+      "Esegetico",
+      "Teologico",
+      "Teologico, Storico, Spirituale",
+      "Scritturistico",
+      "Teologico, Scritturistico, Esegetico",
+      "Eretico",
+      "Spirituale, Teologico, Letterario",
+      "Pastorale, Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Psicologo",
+      "Teologico",
+      "Scritturistico",
+      "Scritturistico",
+      "Teologico, Storico",
+      "Storico",
+      "Filosofico, Spirituale, Pastorale",
+      "Esegetico",
+      "Filosofico, Teologico, Dogmatico",
+      "Scritturistico",
+      "Teologico",
+      "Dogmatico, Spirituale, Teologico",
+      "Teologico",
+      "Teologico",
+      "Teologico, Spirituale, Socioloco, Storico",
+      "Culturale, Scientifico",
+      "Spirituale, Etico, Teologico, Storico, Pastorale",
+      "Teologico",
+      "Filosofico",
+      "Storico",
+      "Esegetico",
+      "Filosofico",
+      "Filosofico, Storico",
+      "Scritturistico",
+      "Letterario, Teologico",
+      "Spirituale, Teologico, Dogmatico",
+      "Scritturistico",
+      "Spirituale, Pastorale",
+      "Filosofico, Storico",
+      "Dogmatico, Teologico",
+      "Teologico",
+      "Culturale, Spirituale, Storico, Etico, Scritturistico",
+      "Scritturistico",
+      "Spirituale, Teologico",
+      "Scientifico, Filosofico",
+      "Culturale, Scientifico",
+      "Teologico",
+      "Teologico, Dogmatico",
+      "Spirituale",
+      "Scritturistico",
+      "Metafisico",
+      "Teologico",
+      "Pastorale, Spirituale, Dogmatico",
+      "Culturale, Scientifico",
+      "Teologico",
+      "Dogmatico, Teologico",
+      "Esegetico, Teologico, Storico, Patristico",
+      "Teologico",
+      "Scritturistico",
+      "Teologico, Dogmatico, Esegetico",
+      "Scritturistico",
+      "Spirituale",
+      "Storico, Letterario, Scritturistico, Culturale",
+      "Scritturistico",
+      "Scritturistico",
+      "Dogmatico, Teologico, Esegetico",
+      "Scritturistico",
+      "Spirituale",
+      "Teologico",
+      "Esegetico",
+      "Pastorale, Spirituale",
+      "Scritturistico",
+      "Teologico, Spirituale, Dogmatico",
+      "Scritturistico",
+      "Scritturistico",
+      "Scientifico, Culturale",
+      "Teologico, Dogmatico",
+      "Esegetico",
+      "Filosofico, Teologico, Scientifico",
+      "Pastorale, Spirituale",
+      "Scritturistico, Filosofico",
+      "Storico, Teologico, Mariologia, Escatologia",
+      "Culturale, Scientifico",
+      "Scritturistico",
+      "Eretico",
+      "Scritturistico",
+      "Culturale, Scientifico",
+      "Letterario, Etico, Storico",
+      "Teologico, Socioloco, Attuale",
+      "Esegetico",
+      "Pastorale, Spirituale, Etico",
+      "Spirituale, Teologico, Dogmatico",
+      "Dogmatico, Teologico",
+      "Filosofico, Spirituale, Teologico, Etico",
+      "Scritturistico",
+      "Scritturistico",
+      "Culturale, Dogmatico",
+      "Esegetico",
+      "Spirituale",
+      "Etico, Storico, Culturale, Letterario",
+      "Pastorale, Storico, Teologico",
+      "Patristico",
+      "Scritturistico",
+      "Scritturistico",
+      "Storico, Filosofico",
+      "Esegetico, Dogmatico, Teologico",
+      "Filosofico, Scientifico",
+      "Esegetico",
+      "Pastorale, Spirituale",
+      "Storico, Etico, Scritturistico, Letterario",
+      "Patristica",
+      "Scritturistico",
+      "Esegetico",
+      "Storico",
+      "Patristica",
+      "Teologico",
+      "Filosofico",
+      "Esegetico",
+      "Etico, Culturale, Letterario",
+      "Scritturistico",
+      "Patristica",
+      "Teologico, Spirituale, Dogmatico",
+      "Esegetico",
+      "Scritturistico",
+      "Storico",
+      "Spirituale, Dogmatico, Storico, Teologico",
+      "Storico, Teologico, Culturale",
+      "Storico, Filosofico, Scientifico, Psicologo, Teologico",
+      "Esegetico",
+      "Teologico, Dogmatico",
+      "Patristica",
+      "Esegetico",
+      "Culturale, Filosofico",
+      "Teologico, Dogmatico",
+      "Spirituale",
+      "Culturale, Spirituale",
+      "Patristica",
+      "Filosofico, Teologico",
+    ];
+
+
+    catalogData.forEach((item, index) => {
+      if (!item.autore && authorsInOrder[index]) {
+        item.autore = authorsInOrder[index];
+      }
+      if (collocazioniInOrder[index]) {
+        item.collocazione = collocazioniInOrder[index];
+      }
+      if (argomentiInOrder[index]) {
+        item.argomento = argomentiInOrder[index];
+      }
+    });
+
+    const bodyEl = document.getElementById("catalog-body");
+    const countEl = document.getElementById("results-count");
+
+    const titoloInput = document.getElementById("f-titolo");
+    const autoreInput = document.getElementById("f-autore");
+    const collocazioneInput = document.getElementById("f-collocazione");
+    const argomentoInput = document.getElementById("f-argomento");
+
+    function renderRows(rows) {
+      bodyEl.innerHTML = "";
+
+      if (!rows.length) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 4;
+        td.textContent = "Nessuna opera trovata con i filtri selezionati.";
+        td.style.color = "#6b7280";
+        tr.appendChild(td);
+        bodyEl.appendChild(tr);
+      } else {
+        rows.forEach((item) => {
+          const tr = document.createElement("tr");
+
+          const tdTitolo = document.createElement("td");
+          tdTitolo.textContent = item.titolo;
+          tr.appendChild(tdTitolo);
+
+          const tdAutore = document.createElement("td");
+          tdAutore.textContent = item.autore;
+          tr.appendChild(tdAutore);
+
+          const tdCollocazione = document.createElement("td");
+          tdCollocazione.innerHTML = '<span class="badge">' + item.collocazione + "</span>";
+          tr.appendChild(tdCollocazione);
+
+          const tdArgomento = document.createElement("td");
+          tdArgomento.textContent = item.argomento;
+          tr.appendChild(tdArgomento);
+
+          bodyEl.appendChild(tr);
+        });
+      }
+
+      countEl.textContent = rows.length === 1
+        ? "1 opera trovata"
+        : rows.length + " opere trovate";
+    }
+
+    function applyFilters() {
+      const titolo = titoloInput.value.trim().toLowerCase();
+      const autore = autoreInput.value.trim().toLowerCase();
+      const collocazione = collocazioneInput.value.trim().toLowerCase();
+      const argomento = argomentoInput.value.trim().toLowerCase();
+
+      const filtered = catalogData.filter((item) => {
+        const matchTitolo = !titolo || item.titolo.toLowerCase().includes(titolo);
+        const matchAutore = !autore || item.autore.toLowerCase().includes(autore);
+        const matchCollocazione =
+          !collocazione || item.collocazione.toLowerCase().includes(collocazione);
+        const matchArgomento = !argomento || item.argomento.toLowerCase().includes(argomento);
+        return matchTitolo && matchAutore && matchCollocazione && matchArgomento;
+      });
+
+      renderRows(filtered);
+    }
+
+    function resetFilters() {
+      titoloInput.value = "";
+      autoreInput.value = "";
+      collocazioneInput.value = "";
+      argomentoInput.value = "";
+      renderRows(catalogData);
+    }
+
+    document.getElementById("btn-filtra").addEventListener("click", applyFilters);
+    document.getElementById("btn-reset").addEventListener("click", resetFilters);
+
+    [titoloInput, autoreInput, collocazioneInput, argomentoInput].forEach((el) => {
+      el.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") applyFilters();
+      });
+      el.addEventListener("change", applyFilters);
+    });
+
+    renderRows(catalogData);
+  </script>
+</body>
+</html>
